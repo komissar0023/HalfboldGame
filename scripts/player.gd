@@ -12,7 +12,8 @@ var target
 # var a = 2
 # var b = "text"
 
-
+func get_class():
+	return 'Player'
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -23,7 +24,7 @@ func _input(event):
 		point = 0
 		isMoving = true
 		path = Navigation2DServer.map_get_path($NavigationAgent2D.get_navigation_map(), self.global_position, get_global_mouse_position(),false, 1)
-#		updateLine()
+		updateLine()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
@@ -35,12 +36,7 @@ func updateLine():
 	
 func _physics_process(delta):
 	if isMoving:
-		var overlappedBod = $Click_Area.get_overlapping_bodies()
-		if overlappedBod.size() > 0:
-			for body in overlappedBod:
-				if body.get_class() == 'Enemy':
-					target = body
-		$Click_Area.global_position = global_position
+		setTarget()
 		var length = path.size()
 		velocity = (path[point] - self.global_position).normalized()
 		self.move_and_slide(velocity*speed*delta)
@@ -52,6 +48,17 @@ func _physics_process(delta):
 				point = 0
 			
 
+func setTarget():
+	var overlappedBod = $Click_Area.get_overlapping_bodies()
+	if overlappedBod.size() > 0:
+		for body in overlappedBod:
+			if body.get_class() == 'Enemy':
+				print('body')
+				target = body
+			if body.get_class() != 'Player':
+				$Click_Area.global_position = global_position
+	else:
+		$Click_Area.global_position = global_position
 
 func _on_Click_Area_body_entered(body):
 	pass # Replace with function body.
