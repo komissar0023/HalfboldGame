@@ -4,10 +4,13 @@ class_name Player
 var velocity:Vector2
 var speed = 9000
 var isMoving = false
+var isAttack = false
 var navMesh:Navigation2D
 var path:PoolVector2Array
 var point = 0
 var target
+var canAttack = true
+signal updateLine(path)
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -22,17 +25,16 @@ func _input(event):
 	if event is InputEventMouseButton and (event as InputEventMouseButton).pressed:
 		$Click_Area.global_position = get_global_mouse_position()
 		point = 0
+		isAttack = false
 		isMoving = true
+		target = null
 		path = Navigation2DServer.map_get_path($NavigationAgent2D.get_navigation_map(), self.global_position, get_global_mouse_position(),false, 1)
-		updateLine()
+		emit_signal('updateLine', path)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
-func updateLine():
-	$Line2D.global_position = Vector2(0,0)
-	$Line2D.points = path
-	$Line2D.update()
+
 	
 func _physics_process(delta):
 	if isMoving:
@@ -46,7 +48,10 @@ func _physics_process(delta):
 			else:
 				isMoving = false
 				point = 0
-			
+	elif isAttack and canAttack:
+		target.getDamage(10)
+		canAttack = false
+		$AttackCooldown.start(1)
 
 func setTarget():
 	var overlappedBod = $Click_Area.get_overlapping_bodies()
@@ -61,4 +66,20 @@ func setTarget():
 		$Click_Area.global_position = global_position
 
 func _on_Click_Area_body_entered(body):
+	pass # Replace with function body.
+
+
+func stopMoving():
+	isMoving = false
+	point = 0
+
+func _on_AttackArea_body_entered(body):
+	if body == target:
+		stopMoving()
+		isAttack = true
+		
+
+
+func _on_Timer_timeout():
+	canAttack = true
 	pass # Replace with function body.

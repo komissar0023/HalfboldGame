@@ -15,7 +15,8 @@ func get_class():
 	return 'Enemy'
 func getDamage(damage):
 	health -= damage
-	if health < 0:
+	$Health.value = health
+	if health <= 0:
 		$AnimatedSprite.play("dead")
 # Called when the node enters the scene tree for the first time.
 func _ready():

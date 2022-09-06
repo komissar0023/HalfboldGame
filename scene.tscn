@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://tscns/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://textures/tile/atlas base.png" type="Texture" id=2]
 [ext_resource path="res://tscns/idleEnemy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scripts/scene.gd" type="Script" id=4]
 
 [sub_resource type="NavigationPolygon" id=4]
 vertices = PoolVector2Array( 48, 48, 0, 48, 0, 0, 48, 0 )
@@ -51,6 +52,7 @@ points = PoolVector2Array( 48, 46.768, 0.0308533, 46.768, 0.0308533, 0, 48, 0 )
 1/z_index = 0
 
 [node name="scene" type="Node2D"]
+script = ExtResource( 4 )
 
 [node name="baseTile" type="TileMap" parent="."]
 tile_set = SubResource( 1 )
@@ -64,3 +66,9 @@ position = Vector2( 275, 149 )
 
 [node name="idleEnemy" parent="." instance=ExtResource( 3 )]
 position = Vector2( 295, 62 )
+
+[node name="Line2D" type="Line2D" parent="."]
+visible = false
+default_color = Color( 1, 0, 0, 1 )
+
+[connection signal="updateLine" from="player" to="." method="_on_player_updateLine"]

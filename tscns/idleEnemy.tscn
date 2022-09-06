@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://textures/enemy/idle.png" type="Texture" id=1]
 [ext_resource path="res://scripts/idleEnemy.gd" type="Script" id=2]
@@ -30,6 +30,12 @@ animations = [ {
 [sub_resource type="CircleShape2D" id=2]
 radius = 24.0
 
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.101961, 1, 0, 1 )
+
+[sub_resource type="Theme" id=4]
+ProgressBar/styles/fg = SubResource( 3 )
+
 [node name="idleEnemy" type="KinematicBody2D"]
 script = ExtResource( 2 )
 
@@ -41,3 +47,12 @@ animation = "down"
 shape = SubResource( 2 )
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Health" type="ProgressBar" parent="."]
+margin_left = -24.0
+margin_top = -42.0
+margin_right = 23.0
+margin_bottom = -28.0
+theme = SubResource( 4 )
+value = 100.0
+percent_visible = false
